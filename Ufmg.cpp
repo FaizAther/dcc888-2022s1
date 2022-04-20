@@ -55,7 +55,7 @@ namespace {
       std::error_code EC;
       llvm::StringRef name = F.getName().str().append(".dot");
       raw_fd_ostream *stream = new raw_fd_ostream(name, EC);
-      errs() << "Writing cfg to " << name;
+      errs() << "Writing cfg to " << name << "\n";
       visited.clear();
       *stream << "digraph \"CFG for \'" << F.getName() << "\' function\" {\n";
       *stream << "\tlabel=\"CFG for \'" << F.getName() << "\' function\";\n\n";
