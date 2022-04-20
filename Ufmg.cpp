@@ -18,45 +18,49 @@ namespace {
     static char ID;
     Ufmg() : FunctionPass(ID) {}
 
-    int runOnBasicBlocks(BasicBlock *bb, std::vector<BasicBlock *> &visited) {
+    int runOnBasicBlocks(BasicBlock *bb, std::vector<BasicBlock *> &visited, raw_fd_ostream *stream) {
       if (bb == NULL)
         return 0;
       for (BasicBlock *bi : visited) {
         if (bb == bi)
           return 0;
       }
-      runOnBasicBlock(bb);
+      runOnBasicBlock(bb, stream);
       visited.push_back(bb);
       for (BasicBlock *bs : successors(bb)) {
-        errs() << "\tNode" << (void *)bb << " -> ";
-        errs() << "\tNode" << (void *)bs << ";";
-        errs() << "\n";
+        *stream << "\tNode" << (void *)bb << " -> ";
+        *stream << "\tNode" << (void *)bs << ";";
+        *stream << "\n";
       }
       for (BasicBlock *bs : successors(bb)) {
-        runOnBasicBlocks(bs, visited);
+        runOnBasicBlocks(bs, visited, stream);
       }
       return 0;
     }
 
-    bool runOnBasicBlock(BasicBlock *bb) {
-      errs() << "\tNode" << (void *)bb << "[shape=record, label=\"{";
-      bb->printAsOperand(errs(), false);
-      errs() << ":";
+    bool runOnBasicBlock(BasicBlock *bb, raw_fd_ostream *stream) {
+      *stream << "\tNode" << (void *)bb << "[shape=record, label=\"{";
+      bb->printAsOperand(*stream, false);
+      *stream << ":";
       for (BasicBlock::InstListType::iterator il = bb->getInstList().begin(), e = bb->getInstList().end(); e != il; il++) {
         Instruction *itn = &*il;
-        errs() << "\\l  " << *itn;
+        *stream << "\\l  " << *itn;
       }
-      errs() << "\\l}\"];\n";
+      *stream << "\\l}\"];\n";
       return false;
     }
 
     bool runOnFunction(Function &F) override {
       std::vector<BasicBlock *> visited;
+      std::error_code EC;
+      llvm::StringRef name = F.getName().str().append(".dot");
+      raw_fd_ostream *stream = new raw_fd_ostream(name, EC);
       visited.clear();
-      errs() << "digraph \"CFG for \'" << F.getName() << "\' function\" {\n";
-      errs() << "\tlabel=\"CFG for \'" << F.getName() << "\' function\";\n\n";
-      runOnBasicBlocks(&F.getEntryBlock(), visited);
-      errs() << "}\n";
+      *stream << "digraph \"CFG for \'" << F.getName() << "\' function\" {\n";
+      *stream << "\tlabel=\"CFG for \'" << F.getName() << "\' function\";\n\n";
+      runOnBasicBlocks(&F.getEntryBlock(), visited, stream);
+      *stream << "}\n";
+      stream->flush();
       return false;
     }
   }; // end of struct Ufmg
