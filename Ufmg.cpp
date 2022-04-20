@@ -53,7 +53,7 @@ namespace {
     bool runOnFunction(Function &F) override {
       std::vector<BasicBlock *> visited;
       std::error_code EC;
-      llvm::StringRef name = F.getName().str().append(".dot");
+      llvm::StringRef name = F.getName().str().append(".udot");
       raw_fd_ostream *stream = new raw_fd_ostream(name, EC);
       errs() << "Writing cfg to " << name << "\n";
       visited.clear();
