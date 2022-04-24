@@ -1,4 +1,4 @@
-// Hello, Ufmg module
+// To Dot, Ufmg module
 // Author: ather
 //
 
