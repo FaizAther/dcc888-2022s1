@@ -27,7 +27,7 @@ $ build> bin/opt -load lib/LLVMUfmg.so -ufmg -enable-new-pm=0 < "<FILENAME.bc>" 
 4. Execute the commends the commands, this will link the opt runner shell scripts inside the llvm-project build and run the tests:
 
 ```bash
-$ build> cd llvm-project/llvm/lib/Transforms/Ufmg
+$ build> cd XYZ/llvm-project/llvm/lib/Transforms/Ufmg
 $ Ufmg> mkdir -p XYZ/llvm-project/build/udot/{bc,pdf,tmps}
 $ Ufmg> cp -r src XYZ/llvm-project/build/udot/
 $ Ufmg> ln opt_run.sh XYZ/llvm-project/build/udot/opt_run.sh
