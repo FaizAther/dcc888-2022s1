@@ -29,7 +29,7 @@ $ build> bin/opt -load lib/LLVMUfmg.so -ufmg -enable-new-pm=0 < "<FILENAME.bc>" 
 ```bash
 $ build> cd llvm-project/llvm/lib/Transforms/Ufmg
 $ Ufmg> mkdir -p XYZ/llvm-project/build/udot/{bc,pdf,tmps}
-$ Ufmg> cp -r src llvm-project/build/udot/
+$ Ufmg> cp -r src XYZ/llvm-project/build/udot/
 $ Ufmg> ln opt_run.sh XYZ/llvm-project/build/udot/opt_run.sh
 $ Ufmg> ln opt_test.sh XYZ/llvm-project/build/udot/opt_test.sh
 $ Ufmg> cd XYZ/llvm-project/build/udot
