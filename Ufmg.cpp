@@ -41,9 +41,10 @@ namespace {
 
     bool runOnBasicBlock(BasicBlock *bb, raw_fd_ostream *stream) {
       *stream << "\tNode" << (void *)bb << "[shape=record, label=\"{BB";
-      bb->printAsOperand(*stream, false);
+      *stream << bb->getNameOrAsOperand().substr(1);
       *stream << ":";
-      for (BasicBlock::InstListType::iterator il = bb->getInstList().begin(), e = bb->getInstList().end(); e != il; il++) {
+      for (BasicBlock::InstListType::iterator il = bb->getInstList().begin() \
+        , e = bb->getInstList().end(); e != il; il++) {
         Instruction *itn = &*il;
         if (itn->getOpcode() == Instruction::Alloca || itn->getOpcode() == Instruction::Store) {
           continue;
@@ -61,26 +62,36 @@ namespace {
         for (unsigned int i = 0; i < itn->getNumOperands(); i++) {
           Value *iop = itn->getOperand(i);
           if (itn->getOpcode() == Instruction::Call) {
-            if (iop->hasName()) {
-              *stream << "@";
-              *stream << iop->getName();
+            if (i == 0) {
+              iop = itn->getOperand(itn->getNumOperands() - 1);
             } else {
-              if (auto *CstExpr = dyn_cast<ConstantExpr>(itn->getOperand(i))) {
-                // BitCastInst is an *Instrution*, here you have a *ConstantExpr* Bitcast
-                if (CstExpr->isCast()) {
-                   *stream << "@";
-                   *stream << CstExpr->getOperand(0)->getName();
+              iop = itn->getOperand(i - 1);
+            }
+            if (iop->hasName()) {
+              *stream << "@" << iop->getName();
+              *stream << "(";
+            } else {
+              if (auto *cexpr = dyn_cast<ConstantExpr>(iop)) {
+                if (cexpr->isCast()) {
+                   *stream << cexpr->getOperand(0)->getName();
+                   *stream << "(";
                 }
               } else { // Unnamed
                 *stream << iop->getNameOrAsOperand();
+                if (i != itn->getNumOperands() - 1) {
+                  *stream << ", ";
+                }
               }
+            }
+            if (i == itn->getNumOperands() - 1) {
+              *stream << ")";
             }
           } else {
             iop->printAsOperand(*stream, false);
             // *stream << " " << *itn->getOperand(i);
-          }
-          if (i != itn->getNumOperands() - 1) {
-            *stream << ", ";
+            if (i != itn->getNumOperands() - 1) {
+              *stream << ", ";
+            }
           }
           // *stream << " " << *itn->getOperand(i);
         }
