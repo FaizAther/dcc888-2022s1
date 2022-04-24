@@ -6,7 +6,9 @@
 
 1. Check no folder named Ufmg inside ```llvm-project/llvm/lib/Transforms```
 2. Unpack zip or git clone repo inside above mentioned directory
-3. ```bash
+3. Execute
+
+```bash
 $ Transfomrs> cd XYZ/llvm-project/build
 $ build> cmake -G "Ninja" ../llvm -DBUILD_SHARED_LIBS=on -DLLVM_ENABLE_PROJECTS=clang
 $ build> cmake --build .
@@ -15,6 +17,7 @@ $ build> cmake --build .
 OPTIONAL AUTO PDF GENERATE: ENSURE XPDF installed or change to your pdf viewer inside opt_run.sh
 
 4. Execute the commends the commands, this will link the opt runner shell scripts inside the llvm-project build and run the tests:
+
 ```bash
 $ build> cd llvm-project/llvm/lib/Transforms/Ufmg
 $ Ufmg> mkdir -p XYZ/llvm-project/build/udot/{bc,pdf,tmps}
