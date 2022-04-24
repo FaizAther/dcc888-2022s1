@@ -52,8 +52,12 @@ namespace {
         // *stream << "\\l  " << *itn;
         *stream << "\\l  ";
         if (itn->getOpcode() != Instruction::Ret && itn->getOpcode() != Instruction::Br) {
-          itn->printAsOperand(*stream, false);
-          *stream << itn->getName() << " = ";
+          if (!(itn->getOpcode() == Instruction::Call && itn->getType()->isVoidTy())) {
+            itn->printAsOperand(*stream, false);
+            *stream << itn->getName() << " = ";
+          }/* else {
+            errs() << *itn->getType() << "XXX\n";
+          }*/
         }
         *stream << itn->getOpcodeName() << " ";
         // if (itn->getOpcode() == Instruction::Call) {
@@ -117,7 +121,8 @@ namespace {
     bool runOnFunction(Function &F) override {
       std::vector<BasicBlock *> visited;
       std::error_code EC;
-      llvm::StringRef name = F.getName().str().append(".udot");
+      std::string name = F.getName().str();
+      name += ".udot";
       raw_fd_ostream *stream = new raw_fd_ostream(name, EC);
       errs() << "Writing cfg to " << name << "\n";
       visited.clear();

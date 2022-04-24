@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function usage() {
-	echo "Usage: ./opt_run.sh main.c"
+	echo "Usage: ./opt_show.sh main.c"
 }
 
 if test $# -ne 1
