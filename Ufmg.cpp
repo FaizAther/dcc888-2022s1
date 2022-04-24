@@ -87,7 +87,21 @@ namespace {
               *stream << ")";
             }
           } else {
-            iop->printAsOperand(*stream, false);
+            if (auto *cexpr = dyn_cast<ConstantExpr>(iop)) {
+              if (cexpr->getOpcode() == Instruction::GetElementPtr) {
+                *stream << cexpr->getOpcodeName() << " ";
+                for (unsigned int gis = 0; gis < cexpr->getNumOperands(); gis++) {
+                  *stream << cexpr->getOperand(gis)->getNameOrAsOperand();
+                  if (gis != cexpr->getNumOperands() - 1){
+                    *stream << ", ";
+                  }
+                }
+              } else {
+                iop->printAsOperand(*stream, false);
+              }
+            } else {
+              iop->printAsOperand(*stream, false);
+            }
             // *stream << " " << *itn->getOperand(i);
             if (i != itn->getNumOperands() - 1) {
               *stream << ", ";
