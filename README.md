@@ -10,7 +10,9 @@
 
 ```bash
 $ Transfomrs> cd XYZ/llvm-project/build
-$ build> cmake -G "Ninja" ../llvm -DBUILD_SHARED_LIBS=on -DLLVM_ENABLE_PROJECTS=clang
+$ build> cmake -G "Ninja" ../llvm \
+-DBUILD_SHARED_LIBS=on \
+-DLLVM_ENABLE_PROJECTS=clang
 $ build> cmake --build .
 ```
 
