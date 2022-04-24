@@ -1,13 +1,25 @@
 #!/bin/bash
 
+SHOW="y"
+
 function usage() {
-	echo "Usage: ./opt_run.sh main.c"
+	echo "Usage: ./opt_run.sh main.c show=y default=n"
 }
 
 if test $# -ne 1
 then
-	usage
-	exit 1
+	if test $# -ne 2
+	then
+		usage
+		exit 1
+	fi
+	if test $2 != "y"
+	then
+		usage
+		exit 1
+	else
+		SHOW="y"
+	fi
 fi
 
 rm -rf {bc,tmps}/*
@@ -41,10 +53,14 @@ cd ..
 cd ..
 
 tree
-cd pdfs/$1
-for FLE in `ls`
-do
-	echo "xpdf $FLE"
-	xpdf $FLE
-done
-cd ../..
+if test $SHOW = "y"
+then
+	./opt_show $1
+fi
+# cd pdfs/$1
+# for FLE in `ls`
+# do
+# 	echo "xpdf $FLE"
+# 	xpdf $FLE
+# done
+# cd ../..
