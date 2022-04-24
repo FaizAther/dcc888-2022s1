@@ -4,7 +4,7 @@
 
 ### Instructions
 
-1. Check no folder named Ufmg inside ```llvm-project/llvm/lib/Transforms```
+1. Check no folder named Ufmg inside `llvm-project/llvm/lib/Transforms`
 2. Unpack zip or git clone repo inside above mentioned directory
 3. Execute
 
