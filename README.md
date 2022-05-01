@@ -1,6 +1,6 @@
 # dcc888-2022s1
 
-## Assignment 1
+## Assignment 1 @ [spec](https://homepages.dcc.ufmg.br/~fernando/classes/dcc888/assignment/)
 
 ### Instructions
 
